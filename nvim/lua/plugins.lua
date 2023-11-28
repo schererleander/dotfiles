@@ -1,29 +1,28 @@
 require('lazy').setup({
-  -- TokyoNight colorscheme
-  {
-		'folke/tokyonight.nvim',
-		enabled = false,
+	{
+		'cranberry-clockworks/coal.nvim',
 		lazy = false,
 		priority = 1000,
 		config = function()
-    	require('tokyonight').setup({
-      	style = 'night',
-				transparent = true,
-				styles = {
-					comments = { italic = false},
-					keywords = { italic = true },
-					functions = {},
-					variables = {},
-					sidebars = 'transparent',
-					floats = 'transparent',
-				},
-			})
-			vim.cmd([[colorscheme tokyonight]])
+			vim.cmd.colorscheme('coal')
+			vim.cmd('highlight Normal guibg=NONE ctermbg=NONE')
+			vim.cmd('highlight LineNr guifg=NONE guibg=NONE ctermfg=NONE ctermbg=NONE')
+			vim.cmd('highlight NormalNC guibg=NONE ctermbg=NONE')
+			vim.cmd('highlight CursorLine guibg=NONE ctermbg=NONE')
+			-- completion menu transparent
+			vim.cmd('highlight Pmenu guibg=NONE ctermbg=NONE')
+			vim.cmd('highlight PmenuSel guibg=NONE ctermbg=NONE')
+			-- vertical lines transparent
+			vim.cmd('highlight WinSeparator guibg=None ctermbg=None')
+			vim.cmd('highlight VertSplit guibg=NONE ctermbg=NONE')
+
+			vim.cmd('highlight SignColumn guibg=NONE ctermbg=None')
 		end
 	},
 	-- 
 	{
 		'jesseleite/nvim-noirbuddy',
+		enabled = false,
 		lazy = false,
 		priority = 1000,
 		dependencies = { 'tjdevries/colorbuddy.nvim' },
@@ -32,13 +31,27 @@ require('lazy').setup({
 			  preset = 'minimal',
 			})
 			vim.cmd('colorscheme noirbuddy')
+			-- nvim transparent
+			vim.cmd('highlight Normal guibg=NONE ctermbg=NONE')
+			vim.cmd('highlight LineNr guifg=NONE guibg=NONE ctermfg=NONE ctermbg=NONE')
+			vim.cmd('highlight NormalNC guibg=NONE ctermbg=NONE')
+			vim.cmd('highlight CursorLine guibg=NONE ctermbg=NONE')
+			-- completion menu transparent
+			vim.cmd('highlight Pmenu guibg=NONE ctermbg=NONE')
+			vim.cmd('highlight PmenuSel guibg=NONE ctermbg=NONE')
+			-- vertical lines transparent
+			vim.cmd('highlight VertSplit guibg=NONE ctermbg=NONE')
 		end
 	},
 	-- Portable package manager to install and manage LSP servers, DAP servers, linters, and formatters.
   {
     'williamboman/mason.nvim',
+		dependencies = { 'williamboman/mason-lspconfig.nvim' },
     config = function()
       require('mason').setup()
+			require('mason-lspconfig').setup({
+				automatic_installation = true,
+			})
     end
   },
   -- A completion engine plugin for neovim written in Lua.
@@ -50,9 +63,9 @@ require('lazy').setup({
 				'neovim/nvim-lspconfig',
 				config = function()
 					local signs = {
-						Error = " ",
+						Error = " ",
 						Warn= " ",
-						Hint = " ",
+						Hint = " ",
 						Info= " "
 					}
 					for type, icon in pairs(signs) do
@@ -66,8 +79,8 @@ require('lazy').setup({
         	  	capabilities = capabilities,
             	settings = {
               	update_in_insert = true,
-              	}
-            	}
+              }
+            }
             lsp.lua_ls.setup {
               capabilities = capabilities,
               settings = {
@@ -140,7 +153,7 @@ require('lazy').setup({
                 else
                   fallback()
                 end
-              end, { "i", "s" }),    
+              end, { "i", "s" }),
             },
             sources = cmp.config.sources({
                 { name = 'nvim_lsp' },
@@ -164,22 +177,21 @@ require('lazy').setup({
   -- Adds indentation guides to all lines.
   {
   	'lukas-reineke/indent-blankline.nvim',
-  	config = function()
-      require('indent_blankline').setup({
-      	filetype_exclude = {
-					'help',
-					'terminal',
-					'alpha',
-					'lazy',
-          'NvimTree',
-        }
-      })
-    end
+  	main = "ibl",
+		opt = {
+			filetypes = {
+				"help",
+				"terminal",
+				"alpha",
+				"lazy",
+				"NvimTree"
+			}
+		}
   },
   --
   {
     'nvim-treesitter/nvim-treesitter',
-    run = ':TSUpdate',
+    build = ':TSUpdate',
     config = function()
     	require('nvim-treesitter.configs').setup({
 				auto_install = true,
@@ -188,7 +200,7 @@ require('lazy').setup({
         	enable = true,
         	use_languagetree = true
       	},
-      	indent = true,
+      	indent = { enable=true },
     	})
     end
   },
@@ -239,6 +251,7 @@ require('lazy').setup({
 				extensions = {
 				}
 			})
+			vim.api.nvim_set_keymap('n', '<C-s>', ':Telescope current_buffer_fuzzy_find<CR>', { noremap = true, silent = true })
 		end
 	},
 	--
@@ -291,41 +304,16 @@ require('lazy').setup({
 		'tamton-aquib/staline.nvim',
 		dependencies = { 'nvim-tree/nvim-web-devicons' },
 		config = function ()
-      local function getCurrentTime()
-        local time = os.date("*t")
-        local hour = string.format("%02d", time.hour)
-        local minute = string.format("%02d", time.min)
-				return hour .. ":" .. minute 
-      end
       require "staline".setup {
         sections = {
-          left = { '  ', 'mode', ' ', ' ', 'file_name' ,' ','branch'},
+          left = { ' ' },
           mid = {'lsp'},
-          right = { 'line_column', getCurrentTime}
+          right = { 'line_column' }
         },
-        --mode_colors = {
-        --	i = "#81a1c1",
-        --	n = "#88c0d0",
-        --	c = "#a3be8c",
-        --	v = "#b48ead",
-        --  i = "#d4be98",
-        --  n = "#8fbcbb",
-        --  v = "#81a1c1",
-        --},
-        --mode_icons = {
-        --	n = "⌂ Normal ",
-        --	i = " Insert ",
-        --	c = " Command ",
-        --	v = "  Visual ",
-        --	V = "  Visual Line ",
-        --}, 
+				lsp_symbols = { Error=" ", Info=" ", Warn=" ", Hint="" },
         defaults = {
           true_colors = true,
-      		-- line_column = " ☰%p%% ",
-          -- line_column = " ☰%l/%L ",
-          line_column = '%l/%L %c ☰ %p%%',
-          -- line_column_new = " ☰%p%% ",
-          -- line_column = "%l/%L  %c  ☰%p%% ",
+          line_column = ' ☰ %l/%L %c',
           branch_symbol = " ",
 					exclude_fts = { 'NvimTree', 'Alpha' },
         },

@@ -1,5 +1,4 @@
 local options = {
-	langmenu = 'en_US.UTF-8',
 	list = false,
 	backup = false,									-- creates a backup file
   clipboard = "unnamedplus",			-- allows neovim to access the system clipboard
@@ -27,7 +26,7 @@ local options = {
 	shiftwidth = 2,									-- the number of spaces inserted for each indentation
   tabstop = 2,										-- insert 2 spaces for a tab ⇥
   cursorline = false,							-- highlight the current line (disabled for now)
-  number = true,									-- set numbered lines
+  number = false,									-- set numbered lines
   relativenumber = false,					-- set relative numbered lines
   numberwidth = 4,								-- set number column width to 2 (default 4)
   wrap = false,										-- display lines as one long lines
@@ -42,4 +41,3 @@ end
 vim.wo.list = false
 
 vim.cmd 'set whichwrap+=<,>,[,],h,l'
-vim.cmd 'lang en'
