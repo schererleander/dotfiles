@@ -1,5 +1,5 @@
 ## 📂 dotfiles
-![screenshot](/.assets/screenshot.png)
+![screenshot](screenshot.png)
 Collection of dotfiles.
 ### Neovim
 - custom dashboard
