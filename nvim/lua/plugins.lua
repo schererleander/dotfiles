@@ -1,25 +1,11 @@
 require("lazy").setup({
   {
-    "EdenEast/nightfox.nvim",
+    "ellisonleao/gruvbox.nvim",
     priority = 1000,
-    opts = {
-      transparent = true,
-      terminal_colors = true,
-      dim_inactive = false,
-      module_default = true,
-      styles = {
-        comments = "italic",
-        keywords = "italic",
-      },
-      inverse = {
-        match_paren = false,
-        visual = false,
-        search = false,
-      },
-    },
-    config = function()
-      vim.cmd("colorscheme terafox")
-    end,
+    config = function ()
+      require("gruvbox").setup({})
+      vim.cmd("colorscheme gruvbox")
+    end
   },
 
   {
@@ -38,7 +24,7 @@ require("lazy").setup({
     config = function()
       require("mason").setup()
       require("mason-lspconfig").setup({
-        ensure_installed = { "lua_ls", "jdtls", "pyright", "tailwindcss", "clangd" },
+        ensure_installed = { "lua_ls", "java_language_server", "pyright", "tailwindcss", "clangd" },
         automatic_installation = true,
       })
 
